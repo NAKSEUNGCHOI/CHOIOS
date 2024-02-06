@@ -97,12 +97,13 @@ void kernel_main()
     char* ptr = kzalloc(4096);
     // this makes the virtual address 0x1000 point to the physical address of ptr (whatever it returns. i.g 0x1000000)
     paging_set(paging_4gb_chunk_get_directory(kernel_chunk), (void*)0x1000, (uint32_t) ptr | PAGING_ACCESS_FROM_ALL | PAGING_IS_PRESENT | PAGING_IS_WRITABLE);
-
+ 
     // enable paging
     enable_paging();
 
-    // so if you set ptr2 to 0x1000, it will essentially point to 0x1000000.
-    // this is why both ptr and ptr2 print AB.
+    // so if you set ptr2 to 0x1000, it will essentially point to 0x1000000
+    // This is because ptr has been set to the 0x100000 (for example) using a virtual address 0x1000 above.
+    // Therefore, both ptr and ptr2 print AB.
     char* ptr2 = (char*) 0x1000;
     ptr2[0] = 'A';
     ptr2[1] = 'B';

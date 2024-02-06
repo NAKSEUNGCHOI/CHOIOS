@@ -52,9 +52,9 @@ int paging_get_indices(void* virtual_address, uint32_t* directory_index_out, uin
     }
 
     // equation to find page table No and table No
-    // e.g) 0x405000 / (1024 * 4096) = 1 = directory index = page table number 1
+    // e.g) 0x405000 / (1024 * 4096) = 1 = page directory index
     *directory_index_out = ((uint32_t) virtual_address / (PAGING_TOTAL_ENTRIES_PER_TABLE * PAGING_PAGE_SIZE));
-    // e.g.) 0x405000 % (1024 * 4096) / 4096 = 5 = table number 5
+    // e.g.) 0x405000 % (1024 * 4096) / 4096 = 5 = page table number 5
     *table_index_out = ((uint32_t) virtual_address % (PAGING_TOTAL_ENTRIES_PER_TABLE * PAGING_PAGE_SIZE) / PAGING_PAGE_SIZE);
 out:
     return res;
