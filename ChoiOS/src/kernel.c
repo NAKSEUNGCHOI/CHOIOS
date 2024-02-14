@@ -5,6 +5,9 @@
 #include "io/io.h"
 #include "memory/heap/kheap.h"
 #include "memory/paging/paging.h"
+#include "string/string.h"
+#include "disk/disk.h"
+#include "fs/pparser.h"
 
 uint16_t* video_mem = 0;
 uint16_t terminal_row = 0;
@@ -55,16 +58,6 @@ void terminal_initialize()
     }
 }
 
-size_t strlen(const char* str)
-{
-    size_t len = 0;
-    while (str[len])
-    {
-        len++;
-    }
-    return len;
-}
-
 void print(const char* str)
 {
     size_t len = strlen(str);
@@ -85,6 +78,9 @@ void kernel_main()
     // initialize our heap.
     kheap_init();
 
+    // search and initialize the disk
+    disk_search_and_init();
+
     // Initialize the interrupt descriptor table
     idt_init();
 
@@ -94,9 +90,9 @@ void kernel_main()
     // switch to kernel paging chunk
     paging_switch(paging_4gb_chunk_get_directory(kernel_chunk));
 
-    char* ptr = kzalloc(4096);
-    // this makes the virtual address 0x1000 point to the physical address of ptr (whatever it returns. i.g 0x1000000)
-    paging_set(paging_4gb_chunk_get_directory(kernel_chunk), (void*)0x1000, (uint32_t) ptr | PAGING_ACCESS_FROM_ALL | PAGING_IS_PRESENT | PAGING_IS_WRITABLE);
+    // char* ptr = kzalloc(4096);
+    // // this makes the virtual address 0x1000 point to the physical address of ptr (whatever it returns. i.g 0x1000000)
+    // paging_set(paging_4gb_chunk_get_directory(kernel_chunk), (void*)0x1000, (uint32_t) ptr | PAGING_ACCESS_FROM_ALL | PAGING_IS_PRESENT | PAGING_IS_WRITABLE);
  
     // enable paging
     enable_paging();
@@ -104,16 +100,23 @@ void kernel_main()
     // so if you set ptr2 to 0x1000, it will essentially point to 0x1000000
     // This is because ptr has been set to the 0x100000 (for example) using a virtual address 0x1000 above.
     // Therefore, both ptr and ptr2 print AB.
-    char* ptr2 = (char*) 0x1000;
-    ptr2[0] = 'A';
-    ptr2[1] = 'B';
-    print(ptr2);
+    // char* ptr2 = (char*) 0x1000;
+    // ptr2[0] = 'A';
+    // ptr2[1] = 'B';
+    // print(ptr2);
 
-    print(ptr);
-
+    // print(ptr);
+    
     // Enable the system interrupts
     enable_interrupts();
+    
+    // test path parser
+    struct path_root* root_path = pathparser_parse("0:/bin/shell.exe", NULL);
 
+    if (root_path)
+    {
+
+    }
     /* test heap */
     // void* ptr = kmalloc(50);
     // void* ptr2 = kmalloc(5000);
