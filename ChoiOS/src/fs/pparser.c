@@ -11,6 +11,7 @@ static int pathparser_path_valid_format(const char* filename)
     return (len >= 3 && isdigit(filename[0]) && memcmp((void*)&filename[1], ":/", 2) == 0);
 }
 
+// get driver No.
 static int pathparser_get_drive_by_path(const char** path)
 {
     if(!pathparser_path_valid_format(*path))
@@ -61,6 +62,7 @@ static const char* pathparser_get_path_part(const char** path)
 
 }
 
+// recursively call itself to parse a part of the given path.
 struct path_part* pathparser_parse_path_part(struct path_part* last_part, const char** path)
 {
     const char* path_part_str = pathparser_get_path_part(path);
@@ -73,6 +75,7 @@ struct path_part* pathparser_parse_path_part(struct path_part* last_part, const 
     part->part = path_part_str;
     part->next = 0x00;
 
+    // linking to the previous part.
     if (last_part)
     {
         last_part->next = part;

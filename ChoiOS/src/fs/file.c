@@ -2,12 +2,14 @@
 #include "config.h"
 #include "memory/memory.h"
 #include "memory/heap/kheap.h"
+#include "fat/fat16.h"
 #include "status.h"
 #include "kernel.h"
 
 struct filesystem* filesystems[CHOIOS_MAX_FILESYSTEMS];
 struct file_descriptor* file_descriptors[CHOIOS_MAX_FILE_DESCRIPTORS];
 
+// a function that looks for a free space in filesystem. 
 static struct filesystem** fs_get_free_filesystem()
 {
     int i = 0;
@@ -37,7 +39,7 @@ void fs_insert_filesystem(struct filesystem* filesystem)
 
 static void fs_static_load()
 {
-    // fs_insert_filesystem(fat16_init());
+    fs_insert_filesystem(fat16_init());
 }
 
 void fs_load()

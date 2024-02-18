@@ -29,8 +29,8 @@ typedef int (*FS_RESOLVE_FUNCTION)(struct disk* disk);
 struct filesystem
 {   
     // Filesystem should return zero from resolve if the privded disk is using its filesystem
-    FS_RESOLVE_FUNCTION resolve;
-    FS_OPEN_FUNCTION open;
+    FS_RESOLVE_FUNCTION resolve; // for binding it to the disk
+    FS_OPEN_FUNCTION open; // for opening the file system.
 
     char name[20];
 };

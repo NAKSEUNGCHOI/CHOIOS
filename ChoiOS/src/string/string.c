@@ -23,6 +23,21 @@ int strnlen(const char* ptr, int max)
     return i;
 }
 
+char* strcpy(char* dest, const char* src)
+{
+    char* res = dest;
+    while (*src != 0)
+    {
+        *dest = *src;
+        dest++;
+        src++;
+    }
+
+    // this is necessary. as src is null terminated above, dest needs to be null terminated as well.
+    *dest = 0x00;
+    return res;
+}
+
 int toNumericDigit(char c)
 {
     return c - 48;

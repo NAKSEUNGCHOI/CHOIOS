@@ -6,6 +6,7 @@
 #include "memory/heap/kheap.h"
 #include "memory/paging/paging.h"
 #include "string/string.h"
+#include "fs/file.h"
 #include "disk/disk.h"
 #include "fs/pparser.h"
 #include "disk/streamer.h"
@@ -79,6 +80,9 @@ void kernel_main()
     // initialize our heap.
     kheap_init();
 
+    // initialize file system
+    fs_init();
+
     // search and initialize the disk
     disk_search_and_init();
 
@@ -123,8 +127,9 @@ void kernel_main()
     diskstreamer_seek(stream, 0x201);
     unsigned char c = 0;
     diskstreamer_read(stream, &c, 1);
+    char buff[20];
+    strcpy(buff, "Nakseung Choi");
     while (1) {}
-
     /* test heap */
     // void* ptr = kmalloc(50);
     // void* ptr2 = kmalloc(5000);
