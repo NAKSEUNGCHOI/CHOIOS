@@ -107,23 +107,32 @@ struct path_root* pathparser_parse(const char* path, const char* current_directo
         goto out;
     }
 
+    // get the driver Number.
+    // This will return an integer value
     res = pathparser_get_drive_by_path(&tmp_path);
     if (res < 0)
     {
         goto out;
     }
+
+    // with the result above, this will create a root.
     path_root = pathparser_create_root(res);
     if (!path_root)
     {
         goto out;
     }
     
+    // get the first part from path given by the user.
     struct path_part* first_part = pathparser_parse_path_part(NULL, &tmp_path);
     if (!first_part)
     {
         goto out;
     }
+
+    // connect this part to the root.
     path_root->first = first_part;
+
+    // recursively call to parse all the paths and link it to the last part.
     struct path_part* part = pathparser_parse_path_part(first_part, &tmp_path);
     while (part)
     {

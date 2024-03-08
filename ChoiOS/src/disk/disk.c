@@ -45,6 +45,8 @@ void disk_search_and_init()
     disk.filesystem = fs_resolve(&disk);
 }
 
+// we have only one drive in our implementation so if the index is not equal to zero,
+// we return null by returning 0.
 struct disk* disk_get (int index)
 {
     if (index != 0)

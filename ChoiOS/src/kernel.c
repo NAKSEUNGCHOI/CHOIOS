@@ -71,11 +71,20 @@ void print(const char* str)
 
 static struct paging_4gb_chunk* kernel_chunk = 0;
 
+void panic(const char* msg)
+{
+    print(msg);
+    while(1) {}
+}
+
 void kernel_main()
 {
     terminal_initialize();   
     // x86 uses little endiness so you need to change the locations. 
     print("Hello World!\ntest");
+
+    // testing panic
+    // panic("The system cannot continue! ERROR!");
 
     // initialize our heap.
     kheap_init();
@@ -122,13 +131,29 @@ void kernel_main()
     // {
 
     // }
-
-    struct disk_stream* stream = diskstreamer_new(0);
-    diskstreamer_seek(stream, 0x201);
-    unsigned char c = 0;
-    diskstreamer_read(stream, &c, 1);
-    char buff[20];
-    strcpy(buff, "Nakseung Choi");
+    /* test stream */
+    // struct disk_stream* stream = diskstreamer_new(0);
+    // diskstreamer_seek(stream, 0x201);
+    // unsigned char c = 0;
+    // diskstreamer_read(stream, &c, 1);
+    // char buff[20];
+    // strcpy(buff, "Nakseung Choi");
+    
+    int fd = fopen("0:/hello.txt", "r");
+    if (fd)
+    {
+        struct file_stat s;
+        fstat(fd, &s);
+        fclose(fd);
+        print("testing\n");
+        // print("We opened hello.txt\n");
+        // char buf[14];
+        // fseek(fd, 2, SEEK_SET);
+        // fread(buf, 11, 1, fd);
+        // buf[13] = 0x00;
+        // print(buf);
+    }
+    
     while (1) {}
     /* test heap */
     // void* ptr = kmalloc(50);
